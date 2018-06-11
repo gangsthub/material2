@@ -7,7 +7,7 @@
           [attr.aria-label]="_intl.sortButtonLabel(id)"
           (focus)="_setIndicatorHintVisible(true)"
           (blur)="_setIndicatorHintVisible(false)">
-    <ng-content></ng-content>
+    <ng-container *ngTemplateOutlet="contentTpl"></ng-container>
   </button>
   <div class="mat-sort-header-button"
        *ngIf="interactuableContent"
@@ -16,8 +16,10 @@
        [attr.aria-label]="_intl.sortButtonLabel(id)"
        (focus)="_setIndicatorHintVisible(true)"
        (blur)="_setIndicatorHintVisible(false)">
-    <ng-content></ng-content>
-</div>
+    <ng-container *ngTemplateOutlet="contentTpl"></ng-container>
+  </div>
+
+  <ng-template #contentTpl><ng-content></ng-content></ng-template>
 
   <!-- Disable animations while a current animation is running -->
   <div class="mat-sort-header-arrow"

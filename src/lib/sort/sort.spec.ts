@@ -57,7 +57,7 @@ describe('MatSort', () => {
 
   it('should have the sort headers register and deregister themselves', () => {
     const sortables = component.matSort.sortables;
-    expect(sortables.size).toBe(4);
+    expect(sortables.size).toBe(5);
     expect(sortables.get('defaultA')).toBe(component.defaultA);
     expect(sortables.get('defaultB')).toBe(component.defaultB);
 
@@ -111,6 +111,7 @@ describe('MatSort', () => {
         ['defaultB', {viewState: 'asc', arrowDirection: 'asc'}],
         ['overrideStart', {viewState: 'desc', arrowDirection: 'desc'}],
         ['overrideDisableClear', {viewState: 'asc', arrowDirection: 'asc'}],
+        ['overrideInteractuableContent', {viewState: 'asc', arrowDirection: 'asc'}],
       ]);
       component.expectViewAndDirectionStates(expectedStates);
     });
@@ -384,6 +385,16 @@ describe('MatSort', () => {
       expect(button.getAttribute('aria-label')).toBe('Sort all of the things');
     })
   );
+
+  it('should render content inside a div instead of a button', () => {
+    const defaultButton = fixture.nativeElement.querySelector('#defaultA button');
+    const overridedContentContainer = fixture.nativeElement
+                                             .querySelector('#overrideInteractuableContent');
+
+    expect(defaultButton).toBeTruthy();
+    expect(overridedContentContainer.querySelector('button')).toBeFalsy();
+    expect(overridedContentContainer.querySelector('div.mat-sort-header-button')).toBeTruthy();
+  });
 });
 
 /**
@@ -422,7 +433,8 @@ function testSingleColumnSortDirectionSequence(fixture: ComponentFixture<SimpleM
 }
 
 /** Column IDs of the SimpleMatSortApp for typing of function params in the component (e.g. sort) */
-type SimpleMatSortAppColumnIds = 'defaultA' | 'defaultB' | 'overrideStart' | 'overrideDisableClear';
+type SimpleMatSortAppColumnIds = 'defaultA' | 'defaultB' | 'overrideStart' |
+                                 'overrideDisableClear' | 'overrideInteractuableContent';
 
 @Component({
   template: `
@@ -455,6 +467,12 @@ type SimpleMatSortAppColumnIds = 'defaultA' | 'defaultB' | 'overrideStart' | 'ov
            disableClear>
         E
       </div>
+      <div id="overrideInteractuableContent"
+           #overrideInteractuableContent
+           mat-sort-header="overrideInteractuableContent"
+           [interactuableContent]="true">
+        E
+      </div>
     </div>
   `
 })
@@ -463,6 +481,7 @@ class SimpleMatSortApp {
 
   active: string;
   start: SortDirection = 'asc';
+  interactuableContent: boolean;
   direction: SortDirection = '';
   disableClear: boolean;
   disabledColumnSort = false;
@@ -473,6 +492,7 @@ class SimpleMatSortApp {
   @ViewChild('defaultB') defaultB: MatSortHeader;
   @ViewChild('overrideStart') overrideStart: MatSortHeader;
   @ViewChild('overrideDisableClear') overrideDisableClear: MatSortHeader;
+  @ViewChild('overrideInteractuableContent') overrideInteractuableContent: MatSortHeader;
 
   constructor (public elementRef: ElementRef) { }
 
@@ -496,7 +516,8 @@ class SimpleMatSortApp {
       ['defaultA', this.defaultA],
       ['defaultB', this.defaultB],
       ['overrideStart', this.overrideStart],
-      ['overrideDisableClear', this.overrideDisableClear]
+      ['overrideDisableClear', this.overrideDisableClear],
+      ['overrideInteractuableContent', this.overrideInteractuableContent]
     ]);
 
     viewStates.forEach((viewState, id) => {
@@ -610,3 +631,12 @@ class MatSortableMissingIdApp { }
   `
 })
 class MatSortableInvalidDirection { }
+
+@Component({
+  template: `
+    <div matSort >
+      <div mat-sort-header="a"> A </div>
+    </div>
+  `
+})
+class MatSortableEnabledInteraction { }

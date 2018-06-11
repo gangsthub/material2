@@ -2,12 +2,22 @@
      [class.mat-sort-header-sorted]="_isSorted()"
      [class.mat-sort-header-position-before]="arrowPosition == 'before'">
   <button class="mat-sort-header-button" type="button"
+          *ngIf="!interactuableContent"
           [attr.disabled]="_isDisabled() || null"
           [attr.aria-label]="_intl.sortButtonLabel(id)"
           (focus)="_setIndicatorHintVisible(true)"
           (blur)="_setIndicatorHintVisible(false)">
     <ng-content></ng-content>
   </button>
+  <div class="mat-sort-header-button"
+       *ngIf="interactuableContent"
+       tabindex="0"
+       [attr.disabled]="_isDisabled() || null"
+       [attr.aria-label]="_intl.sortButtonLabel(id)"
+       (focus)="_setIndicatorHintVisible(true)"
+       (blur)="_setIndicatorHintVisible(false)">
+    <ng-content></ng-content>
+</div>
 
   <!-- Disable animations while a current animation is running -->
   <div class="mat-sort-header-arrow"

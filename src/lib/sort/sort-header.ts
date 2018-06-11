@@ -124,6 +124,12 @@ export class MatSortHeader extends _MatSortHeaderMixinBase
   /** Overrides the sort start value of the containing MatSort for this MatSortable. */
   @Input() start: 'asc' | 'desc';
 
+  /**
+   * Gives the option to render the content of the mat-sort-header inside a focusable div,
+   * instead of a button.
+   */
+  @Input() interactuableContent = false;
+
   /** Overrides the disable clear value of the containing MatSort for this MatSortable. */
   @Input()
   get disableClear(): boolean { return this._disableClear; }
